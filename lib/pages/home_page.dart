@@ -1,4 +1,9 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:weather_app_ex/repositories/weather_repository.dart';
+import 'package:weather_app_ex/services/weather_api_services.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -12,6 +17,13 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     print('home page init state');
     super.initState();
+    _fetchWeather();
+  }
+
+  _fetchWeather() {
+    WeatherRepository(
+            weatherApiServices: WeatherApiServices(httpClient: http.Client()))
+        .fetchWeather('seoul');
   }
 
   @override
