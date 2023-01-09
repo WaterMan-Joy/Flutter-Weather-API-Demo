@@ -12,17 +12,14 @@ class WeatherRepository {
   });
   Future<Weather> fetchWeather(String city) async {
     try {
-      final DireactGecoding direactGecoding =
+      final DireactGecoding direactGeocoding =
           await weatherApiServices.getDireactGeocoding(city);
-      print('***direact geoconding : $direactGecoding');
 
       final Weather tempWeather =
-          await weatherApiServices.getWeather(direactGecoding);
-      print('***temp weather : $tempWeather');
+          await weatherApiServices.getWeather(direactGeocoding);
 
       final Weather weather = tempWeather.copyWith(
-          name: direactGecoding.name, country: direactGecoding.country);
-      print('*** weater : $weather');
+          name: direactGeocoding.name, country: direactGeocoding.country);
       return weather;
     } on WeatherException catch (e) {
       throw CustomError(errMsg: e.message);

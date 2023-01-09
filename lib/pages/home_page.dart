@@ -1,9 +1,6 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'package:weather_app_ex/repositories/weather_repository.dart';
-import 'package:weather_app_ex/services/weather_api_services.dart';
+import 'package:provider/provider.dart';
+import 'package:weather_app_ex/providers/weather/weather_provider.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -13,6 +10,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  // 테스트 코드
   @override
   void initState() {
     print('home page init state');
@@ -21,9 +19,10 @@ class _HomePageState extends State<HomePage> {
   }
 
   _fetchWeather() {
-    WeatherRepository(
-            weatherApiServices: WeatherApiServices(httpClient: http.Client()))
-        .fetchWeather('seoul');
+    // 뷰가 순차적으로 로드될 수 있도록
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<WeatherProvider>().fetchWeather('seoul');
+    });
   }
 
   @override
