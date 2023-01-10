@@ -2,6 +2,7 @@
 import 'package:equatable/equatable.dart';
 
 class Weather extends Equatable {
+  final String main;
   final String description;
   final String icon;
   final double temp;
@@ -10,7 +11,9 @@ class Weather extends Equatable {
   final String name;
   final String country;
   final DateTime lastUpdated;
+  final double windSpeed;
   Weather({
+    required this.main,
     required this.description,
     required this.icon,
     required this.temp,
@@ -19,11 +22,14 @@ class Weather extends Equatable {
     required this.name,
     required this.country,
     required this.lastUpdated,
+    required this.windSpeed,
   });
 
   @override
   List<Object> get props {
     return [
+      main,
+      description,
       name,
       icon,
       temp,
@@ -31,6 +37,7 @@ class Weather extends Equatable {
       tempMax,
       country,
       lastUpdated,
+      windSpeed,
     ];
   }
 
@@ -40,29 +47,37 @@ class Weather extends Equatable {
   factory Weather.fromJson(Map<String, dynamic> json) {
     final weather = json['weather'][0];
     final main = json['main'];
+    final wind = json['wind'];
 
     return Weather(
-        description: weather['description'],
-        icon: weather['icon'],
-        temp: main['temp'],
-        tempMin: main['temp_min'],
-        tempMax: main['temp_max'],
-        name: '',
-        country: '',
-        lastUpdated: DateTime.now());
+      main: weather['main'],
+      description: weather['description'],
+      icon: weather['icon'],
+      temp: main['temp'],
+      tempMin: main['temp_min'],
+      tempMax: main['temp_max'],
+      name: '',
+      country: '',
+      lastUpdated: DateTime.now(),
+      windSpeed: wind['speed'],
+    );
   }
 
   factory Weather.initial() => Weather(
-      description: '',
-      icon: '',
-      temp: 100.0,
-      tempMin: 100.0,
-      tempMax: 100.0,
-      name: '',
-      country: '',
-      lastUpdated: DateTime(1970));
+        main: '',
+        description: '',
+        icon: '',
+        temp: 100.0,
+        tempMin: 100.0,
+        tempMax: 100.0,
+        name: '',
+        country: '',
+        lastUpdated: DateTime(1970),
+        windSpeed: 0,
+      );
 
   Weather copyWith({
+    String? main,
     String? description,
     String? icon,
     double? temp,
@@ -71,8 +86,10 @@ class Weather extends Equatable {
     String? name,
     String? country,
     DateTime? lastUpdated,
+    double? windSpeed,
   }) {
     return Weather(
+      main: main ?? this.main,
       description: description ?? this.description,
       icon: icon ?? this.icon,
       temp: temp ?? this.temp,
@@ -81,6 +98,7 @@ class Weather extends Equatable {
       name: name ?? this.name,
       country: country ?? this.country,
       lastUpdated: lastUpdated ?? this.lastUpdated,
+      windSpeed: windSpeed ?? this.windSpeed,
     );
   }
 }

@@ -13,6 +13,7 @@ class WeatherProvider with ChangeNotifier {
   WeatherState get state => _state;
 
   final WeatherRepository weatherRepository;
+
   WeatherProvider({
     required this.weatherRepository,
   });

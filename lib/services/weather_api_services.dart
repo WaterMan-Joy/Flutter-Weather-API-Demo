@@ -58,6 +58,7 @@ class WeatherApiServices {
         'lat': '${direactGecoding.lat}',
         'lon': '${direactGecoding.lon}',
         'units': kUnit,
+        'lang': 'kr',
         'appid': dotenv.env['APPID'],
       },
     );
