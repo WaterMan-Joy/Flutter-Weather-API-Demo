@@ -1,33 +1,34 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+
 import 'package:weather_app_ex/providers/providers.dart';
 
 import '../../constants/constants.dart';
 
 part 'theme_state.dart';
 
-class AppThemeProvider with ChangeNotifier {
-  AppThemeState _state = AppThemeState.initial();
-  AppThemeState get state => _state;
+class AppThemeProvider {
+  final WeatherProvider wp;
+  AppThemeProvider({
+    required this.wp,
+  });
 
-  void update(WeatherProvider wp) {
-    // if (wp.state.weather.temp > kWarmOrNot) {
-    //   print(wp.state.weather.lastUpdated.hour);
-    //   _state = _state.copyWith(appTheme: AppTheme.light);
-    // } else {
-    //   print(wp.state.weather.lastUpdated.hour);
-    //   _state = _state.copyWith(appTheme: AppTheme.dark);
-    // }
-    // if (int.parse(wp.state.weather.lastUpdated).toDouble()) {
-    //   return;
-    // }
-    if (wp.state.weather.lastUpdated.hour < 13) {
+  AppThemeState get state {
+    if (wp.state.weather.temp > kWarmOrNot) {
       print(wp.state.weather.lastUpdated.hour);
-      _state = _state.copyWith(appTheme: AppTheme.light);
+      return AppThemeState();
     } else {
       print(wp.state.weather.lastUpdated.hour);
-      _state = _state.copyWith(appTheme: AppTheme.dark);
+      return AppThemeState(appTheme: AppTheme.dark);
     }
-    notifyListeners();
+
+    // if (wp.state.weather.lastUpdated.hour < 13) {
+    //   print(wp.state.weather.lastUpdated.hour);
+    //   return AppThemeState();
+    // } else {
+    //   print(wp.state.weather.lastUpdated.hour);
+    //   return AppThemeState(appTheme: AppTheme.dark);
+    // }
   }
 }
