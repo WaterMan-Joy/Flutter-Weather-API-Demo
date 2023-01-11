@@ -36,6 +36,7 @@ class WeatherApiServices {
 
       // response.body 저장
       final responseBody = json.decode(response.body);
+      print('*****response body : $responseBody');
 
       // responseBody 가 Empty 라면
       if (responseBody.isEmpty) {
@@ -43,6 +44,7 @@ class WeatherApiServices {
       }
 
       final direactGeocoding = DireactGecoding.fromJson(responseBody);
+      print('*****direact geocoding $direactGeocoding');
       return direactGeocoding;
     } catch (e) {
       rethrow;
@@ -72,6 +74,7 @@ class WeatherApiServices {
       final weatherJson = json.decode(response.body);
 
       final Weather weather = Weather.fromJson(weatherJson);
+      print('*****weather $weather');
 
       return weather;
     } catch (e) {
