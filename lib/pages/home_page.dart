@@ -8,8 +8,8 @@ import 'package:weather_app_ex/providers/temp_settings/temp_settings_provider.da
 import 'package:weather_app_ex/providers/weather/weather_provider.dart';
 import 'package:weather_app_ex/widgets/error_dialog.dart';
 
-// fl chart
-import 'package:fl_chart/fl_chart.dart';
+// Location
+import 'package:location/location.dart';
 
 import '../constants/constants.dart';
 
@@ -25,6 +25,7 @@ class _HomePageState extends State<HomePage> {
 
   // 나중에 값을 선언
   late final WeatherProvider _weatherProv;
+  late final void Function() _removeListener;
 
   @override
   void initState() {
@@ -32,33 +33,27 @@ class _HomePageState extends State<HomePage> {
     // 뷰가 처음 로드되음 초기화때되었을때 _weatherProv 에 값을 받는다
     _weatherProv = context.read<WeatherProvider>();
 
-    _weatherProv.addListener(() {
-      _registerListener();
-    });
+    _removeListener = _weatherProv.addListener(_registerListener);
   }
 
   @override
   void dispose() {
-    _weatherProv.removeListener(() {
-      _registerListener();
-    });
+    _removeListener();
     super.dispose();
   }
 
   //
-  void _registerListener() {
-    WeatherState ws = context.read<WeatherProvider>().state;
-
+  void _registerListener(WeatherState ws) {
     if (ws.status == WeatherStatus.error) {
       errorDialog(context, ws.error.errMsg);
     }
   }
 
   Widget _showWeather() {
-    final state = context.watch<WeatherProvider>().state;
+    final state = context.watch<WeatherState>();
 
     String showTemp(double temp) {
-      final tempStatus = context.watch<TempSettingsProvider>().state.tempStatus;
+      final tempStatus = context.watch<TempSettingsState>().tempStatus;
 
       if (tempStatus == TempStatus.fahrenheit) {
         return ((temp * 9 / 5) + 35).toStringAsFixed(1) + '℉';
@@ -177,11 +172,40 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final Location location = new Location();
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Home Page'),
         centerTitle: true,
         actions: [
+          IconButton(
+            onPressed: () async {
+              bool _serviceEnabled;
+              PermissionStatus _permissionGranted;
+              LocationData _locationData;
+
+              _serviceEnabled = await location.serviceEnabled();
+              if (!_serviceEnabled) {
+                _serviceEnabled = await location.requestService();
+                if (!_serviceEnabled) {
+                  return;
+                }
+              }
+
+              _permissionGranted = await location.hasPermission();
+              if (_permissionGranted == PermissionStatus.denied) {
+                _permissionGranted = await location.requestPermission();
+                if (_permissionGranted != PermissionStatus.granted) {
+                  return;
+                }
+              }
+
+              _locationData = await location.getLocation();
+              print(_locationData);
+            },
+            icon: Icon(Icons.location_on),
+          ),
           IconButton(
             onPressed: () async {
               _city = await Navigator.push(

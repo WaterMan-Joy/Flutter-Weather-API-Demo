@@ -24,7 +24,7 @@ class _SettingsPageState extends State<SettingsPage> {
           title: Text('온도 설정'),
           subtitle: Text('섭씨 / 화씨'),
           trailing: Switch(
-            value: context.watch<TempSettingsProvider>().state.tempStatus ==
+            value: context.watch<TempSettingsState>().tempStatus ==
                 TempStatus.selsius,
             onChanged: (_) {
               context.read<TempSettingsProvider>().toggleTempUnit();

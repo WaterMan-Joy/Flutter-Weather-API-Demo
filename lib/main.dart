@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_state_notifier/flutter_state_notifier.dart';
 import 'package:provider/provider.dart';
 import 'package:weather_app_ex/providers/providers.dart';
 import 'package:weather_app_ex/providers/temp_settings/temp_settings_provider.dart';
@@ -29,29 +30,21 @@ class MyApp extends StatelessWidget {
             ),
           ),
         ),
-        ChangeNotifierProvider<WeatherProvider>(
-          create: (context) => WeatherProvider(
-            weatherRepository: context.read<WeatherRepository>(),
-          ),
+        StateNotifierProvider<WeatherProvider, WeatherState>(
+          create: (context) => WeatherProvider(),
         ),
-        ChangeNotifierProvider<TempSettingsProvider>(
-          create: ((context) => TempSettingsProvider()),
+        StateNotifierProvider<TempSettingsProvider, TempSettingsState>(
+          create: (context) => TempSettingsProvider(),
         ),
-        ProxyProvider<WeatherProvider, AppThemeProvider>(
-          update: (
-            BuildContext context,
-            WeatherProvider weatherProvider,
-            AppThemeProvider? _,
-          ) =>
-              AppThemeProvider(wp: weatherProvider),
+        StateNotifierProvider<AppThemeProvider, AppThemeState>(
+          create: (context) => AppThemeProvider(),
         ),
       ],
       builder: ((context, _) => MaterialApp(
             title: 'Weather app',
             debugShowCheckedModeBanner: false,
             // theme: ThemeData(useMaterial3: true),
-            theme: context.watch<AppThemeProvider>().state.appTheme ==
-                    AppTheme.light
+            theme: context.watch<AppThemeState>().appTheme == AppTheme.light
                 ? ThemeData.light()
                 : ThemeData.dark(),
             home: HomePage(),

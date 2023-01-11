@@ -1,19 +1,18 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+import 'package:state_notifier/state_notifier.dart';
 
 part 'temp_settings_state.dart';
 
-class TempSettingsProvider with ChangeNotifier {
-  TempSettingsState _state = TempSettingsState();
-  TempSettingsState get state => _state;
+class TempSettingsProvider extends StateNotifier<TempSettingsState> {
+  TempSettingsProvider() : super(TempSettingsState.initial());
 
   void toggleTempUnit() {
-    _state = _state.copyWith(
-      tempStatus: _state.tempStatus == TempStatus.selsius
+    state = state.copyWith(
+      tempStatus: state.tempStatus == TempStatus.selsius
           ? TempStatus.fahrenheit
           : TempStatus.selsius,
     );
-    print('toggle : ${_state.tempStatus}');
-    notifyListeners();
+    print('toggle : ${state.tempStatus}');
   }
 }
