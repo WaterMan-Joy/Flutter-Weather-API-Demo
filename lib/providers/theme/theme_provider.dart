@@ -11,9 +11,21 @@ class AppThemeProvider with ChangeNotifier {
   AppThemeState get state => _state;
 
   void update(WeatherProvider wp) {
-    if (wp.state.weather.temp > kWarmOrNot) {
+    // if (wp.state.weather.temp > kWarmOrNot) {
+    //   print(wp.state.weather.lastUpdated.hour);
+    //   _state = _state.copyWith(appTheme: AppTheme.light);
+    // } else {
+    //   print(wp.state.weather.lastUpdated.hour);
+    //   _state = _state.copyWith(appTheme: AppTheme.dark);
+    // }
+    // if (int.parse(wp.state.weather.lastUpdated).toDouble()) {
+    //   return;
+    // }
+    if (wp.state.weather.lastUpdated.hour < 13) {
+      print(wp.state.weather.lastUpdated.hour);
       _state = _state.copyWith(appTheme: AppTheme.light);
     } else {
+      print(wp.state.weather.lastUpdated.hour);
       _state = _state.copyWith(appTheme: AppTheme.dark);
     }
     notifyListeners();
